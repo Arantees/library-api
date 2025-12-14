@@ -10,8 +10,10 @@ app.get("/", (req, res) => {
 
 const authRoutes = require("./routes/auth.routes");
 const protectedRoutes = require("./routes/protected.routes");
+const loanRoutes = require('./routes/loan.routes')
 
 app.use(authRoutes);
 app.use(protectedRoutes);
+app.use(loanRoutes)
 
 module.exports = app;
