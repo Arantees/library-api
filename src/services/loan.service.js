@@ -9,9 +9,11 @@ function createLoan({ userName, bookTitle, days }) {
     id: loans.length + 1,
     userName,
     bookTitle,
+    days,
     loanDate,
     dueDate,
     returnedAt: null,
+    hasLateBefore: false,
   };
 
   loans.push(loan);
