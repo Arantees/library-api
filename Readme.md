@@ -67,7 +67,7 @@ Exemplo de corpo da requisição
 
 ```json
 {
-  "email": "admin@email.com",
+  "email": "admin@gmail.com",
   "password": "123456"
 }
 ```
