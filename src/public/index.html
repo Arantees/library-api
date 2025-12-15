@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Library API</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Library API</h1>
+
+    <h2>Login</h2>
+    <input id="email" placeholder="Email" />
+    <input id="password" type="password" placeholder="Senha" />
+    <button onclick="login()">Login</button>
+
+    <h2>Criar Empréstimo</h2>
+    <input id="userName" placeholder="Usuário" />
+    <input id="bookTitle" placeholder="Livro" />
+    <input id="days" type="number" placeholder="Dias" />
+    <button onclick="createLoan()">Criar Empréstimo</button>
+
+    <pre id="result"></pre>
+
+    <script src="script.js"></script>
+  </body>
+</html>
