@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const ADMIN_EMAIL = 'admin@email.com';
+const ADMIN_EMAIL = 'admin@gmail.com';
 const ADMIN_PASSWORD = '123456';
 const JWT_SECRET = 'secret_key';
 

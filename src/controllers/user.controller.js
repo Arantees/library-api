@@ -1,0 +1,48 @@
+const userService = require("../services/user.service");
+
+function createUser(req, res) {
+  const { name, email } = req.body;
+
+  if (!name || !email) {
+    return res.status(400).json({ message: "Invalid user data" });
+  }
+
+  const existingUser = userService.findUserByEmail(email);
+  if (existingUser) {
+    return res.status(409).json({ message: "User already exists" });
+  }
+
+  const user = userService.createUser({
+    name,
+    email,
+    role: "USER"
+  });
+
+  return res.status(201).json(user);
+}
+
+function createAdmin(req, res) {
+  const { name, email } = req.body;
+
+  if (!name || !email) {
+    return res.status(400).json({ message: "Invalid admin data" });
+  }
+
+  const existingUser = userService.findUserByEmail(email);
+  if (existingUser) {
+    return res.status(409).json({ message: "Admin already exists" });
+  }
+
+  const admin = userService.createUser({
+    name,
+    email,
+    role: "ADMIN"
+  });
+
+  return res.status(201).json(admin);
+}
+
+module.exports = {
+  createUser,
+  createAdmin
+};
