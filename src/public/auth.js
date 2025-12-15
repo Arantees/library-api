@@ -5,9 +5,9 @@ async function login() {
   const response = await fetch("/admin/login", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, password })
+    body: JSON.stringify({ email, password }),
   });
 
   if (!response.ok) {
@@ -48,18 +48,39 @@ async function createLoan() {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ userName, bookTitle, days })
+    body: JSON.stringify({ userName, bookTitle, days }),
   });
 
   const data = await response.json();
 
-  document.getElementById("result").innerText =
-    JSON.stringify(data, null, 2);
+  document.getElementById("result").innerText = JSON.stringify(data, null, 2);
 }
 
 function logout() {
   localStorage.removeItem("token");
   window.location.href = "/login.html";
+}
+
+async function createUser() {
+  const name = document.getElementById("userNameCreate").value;
+  const email = document.getElementById("userEmailCreate").value;
+
+  if (!name || !email) {
+    alert("Preencha nome e email");
+    return;
+  }
+
+  const response = await fetch("/users", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name, email }),
+  });
+
+  const data = await response.json();
+
+  document.getElementById("result").innerText = JSON.stringify(data, null, 2);
 }
