@@ -1,13 +1,14 @@
-const loans = [];
+let loans = [];
+let nextId = 1;
 
-function createLoan({ userName, bookTitle, days }) {
+function createLoan({ userId, bookTitle, days }) {
   const loanDate = new Date();
   const dueDate = new Date();
   dueDate.setDate(loanDate.getDate() + days);
 
   const loan = {
-    id: loans.length + 1,
-    userName,
+    id: nextId++,
+    userId,
     bookTitle,
     days,
     loanDate,

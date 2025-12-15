@@ -1,15 +1,21 @@
 const loanService = require("../services/loan.service");
 const calculationService = require("../services/calculation.service");
+const userService = require("../services/user.service");
 
 function createLoan(req, res) {
-  const { userName, bookTitle, days } = req.body;
+  const { userId, bookTitle, days } = req.body;
 
-  if (!userName || !bookTitle || !days) {
+  if (!userId || !bookTitle || !days) {
     return res.status(400).json({ message: "Missing data" });
   }
 
+  const user = userService.findUserById(userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
   const loan = loanService.createLoan({
-    userName,
+    userId,
     bookTitle,
     days,
   });
