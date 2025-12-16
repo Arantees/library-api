@@ -4,11 +4,11 @@ function calculateRental(days) {
   }
 
   const basePrice = 5;
-  const dailyPrice = 1;
+  const dailyPrice = 2;
 
-  if (days <= 0) return basePrice;
+  if (days === 1) return basePrice;
 
-  return basePrice + dailyPrice * days;
+  return basePrice + (days -1) * dailyPrice;
 }
 
 function calculateFine(daysLate) {
