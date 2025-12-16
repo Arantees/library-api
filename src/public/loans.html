@@ -16,14 +16,20 @@
     <input id="userEmailCreate" placeholder="Email do usuário" />
 
     <button onclick="createUser()">Criar Usuário</button>
-    <p><strong>Usuário selecionado:</strong> <span id="selectedUser">Nenhum</span></p>
-
+    <p>
+      <strong>Usuário selecionado:</strong>
+      <span id="selectedUser">Nenhum</span>
+    </p>
 
     <hr />
 
-    <h2>Criar Empréstimo</h2>
+    <h3>Usuário selecionado</h3>
 
-    <input id="userName" placeholder="Usuário" />
+    <select id="userSelect" onchange="selectUser()">
+      <option value="">Selecione um usuário</option>
+    </select>
+
+    <h2>Criar Empréstimo</h2>
     <input id="bookTitle" placeholder="Livro" />
     <input id="days" type="number" placeholder="Dias" />
 

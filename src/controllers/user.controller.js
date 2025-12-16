@@ -15,7 +15,7 @@ function createUser(req, res) {
   const user = userService.createUser({
     name,
     email,
-    role: "USER"
+    role: "USER",
   });
 
   return res.status(201).json(user);
@@ -36,13 +36,19 @@ function createAdmin(req, res) {
   const admin = userService.createUser({
     name,
     email,
-    role: "ADMIN"
+    role: "ADMIN",
   });
 
   return res.status(201).json(admin);
 }
 
+function listUsers(req, res) {
+  const users = userService.listUsers();
+  return res.json(users);
+}
+
 module.exports = {
   createUser,
-  createAdmin
+  createAdmin,
+  listUsers,
 };

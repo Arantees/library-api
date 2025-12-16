@@ -1,4 +1,3 @@
-
 let selectedUserId = null;
 
 async function login() {
@@ -96,6 +95,39 @@ async function createUser() {
   ).innerText = `${data.name} (ID: ${data.id})`;
 
   document.getElementById("result").innerText = JSON.stringify(data, null, 2);
+  await loadUsers();
+}
+
+async function loadUsers() {
+  const response = await fetch("/users");
+  const users = await response.json();
+
+  const select = document.getElementById("userSelect");
+  select.innerHTML = '<option value="">Selecione um usuário</option>';
+
+  users.forEach((user) => {
+    const option = document.createElement("option");
+    option.value = user.id;
+    option.textContent = `${user.name} (${user.email})`;
+    select.appendChild(option);
+  });
+}
+
+function selectUser() {
+  const select = document.getElementById("userSelect");
+  selectedUserId = Number(select.value);
+
+  if (!selectedUserId) {
+    document.getElementById("selectedUser").innerText = "Nenhum";
+    return;
+  }
+
+  const selectedOption = select.options[select.selectedIndex].text;
+  document.getElementById("selectedUser").innerText = selectedOption;
+}
+
+if (window.location.pathname.includes("loans.html")) {
+  loadUsers();
 }
 
 function logout() {
