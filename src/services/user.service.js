@@ -26,8 +26,14 @@ function findUserById(id) {
   return users.find((u) => u.id === Number(id));
 }
 
+function listUsers() {
+  return users;
+}
+
+
 module.exports = {
   createUser,
   findUserByEmail,
   findUserById,
+  listUsers,
 };
