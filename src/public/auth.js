@@ -103,6 +103,7 @@ async function loadUsers() {
   const users = await response.json();
 
   const select = document.getElementById("userSelect");
+  if (!select) return;
   select.innerHTML = '<option value="">Selecione um usuário</option>';
 
   users.forEach((user) => {
@@ -130,7 +131,9 @@ if (window.location.pathname.includes("loans.html")) {
   loadUsers();
 }
 
+
 function logout() {
   localStorage.removeItem("token");
   window.location.href = "/login.html";
 }
+
