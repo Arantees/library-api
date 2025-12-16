@@ -32,13 +32,21 @@
       <span id="selectedUser">Nenhum</span>
     </p>
 
-    <h2>Criar Empréstimo</h2>
+    <h2>Alugar Livro</h2>
     <input id="bookTitle" placeholder="Livro" />
     <input id="days" type="number" placeholder="Dias" />
 
     <button onclick="createLoan()">Criar</button>
-
     <pre id="result"></pre>
+
+    <select id="loanSelect" onchange="selectLoan()">
+      <option value="">Selecione um empréstimo</option>
+    </select>
+
+    <button onclick="viewLoanDetails()">Ver detalhes do empréstimo</button>
+
+    <h3>Detalhes do Empréstimo</h3>
+    <pre id="loanDetails"></pre>
 
     <script src="auth.js"></script>
   </body>

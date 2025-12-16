@@ -8,5 +8,7 @@ router.post("/loans", authenticate, loanController.createLoan);
 router.get("/loans/:id", loanController.getLoan);
 router.get("/loans/:id/rental", authenticate, loanController.getRentalValue);
 router.get("/loans/:id/fine", authenticate, loanController.getFineValue);
+router.get("/users/:id/loans", authenticate, loanController.listLoansByUser
+);
 
 module.exports = router;

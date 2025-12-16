@@ -33,6 +33,14 @@ function getLoan(req, res) {
   return res.json(loan);
 }
 
+function listLoansByUser(req, res) {
+  const userId = Number(req.params.id);
+
+  const loans = loanService.findLoansByUserId(userId);
+
+  return res.json(loans);
+}
+
 function getRentalValue(req, res) {
   const loan = loanService.findLoanById(req.params.id);
 
@@ -55,7 +63,10 @@ function getFineValue(req, res) {
   const today = new Date();
 
   if (today <= loan.dueDate) {
-    return res.json({ fine: 0 });
+    return res.json({
+      status: "No prazo",
+      fine: 0,
+    });
   }
 
   const daysLate = Math.ceil((today - loan.dueDate) / (1000 * 60 * 60 * 24));
@@ -67,7 +78,11 @@ function getFineValue(req, res) {
     loan.hasLateBefore = true;
   }
 
-  return res.json({ fine });
+  return res.json({
+    status: "Atrasado",
+    daysLate,
+    fine,
+  });
 }
 
 module.exports = {
@@ -75,4 +90,5 @@ module.exports = {
   getLoan,
   getRentalValue,
   getFineValue,
+  listLoansByUser,
 };

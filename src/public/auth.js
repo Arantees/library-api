@@ -1,4 +1,5 @@
 let selectedUserId = null;
+let selectedLoanId = null;
 
 async function login() {
   const email = document.getElementById("email").value;
@@ -44,7 +45,7 @@ async function createLoan() {
 
   const token = getToken();
   const bookTitle = document.getElementById("bookTitle").value.trim();
-  const days = number(document.getElementById("days").value);
+  const days = Number(document.getElementById("days").value);
 
   if (!bookTitle) {
     alert("Informe o nome do livro");
@@ -68,10 +69,70 @@ async function createLoan() {
       days,
     }),
   });
+  const loan = await response.json();
 
-  const data = await response.json();
+  if (!response.ok) {
+    alert(loan.message || "Erro ao criar empréstimo");
+    return;
+  }
 
-  document.getElementById("result").innerText = JSON.stringify(data, null, 2);
+  await loadLoansByUser(selectedUserId);
+
+  currentLoanId = loan.id;
+
+  const rentalResponse = await fetch(`/loans/${loan.id}/rental`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const rentalData = await rentalResponse.json();
+
+  const fineResponse = await fetch(`/loans/${loan.id}/fine`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const fineData = await fineResponse.json();
+
+  document.getElementById("loanDetails").innerText = JSON.stringify(
+    {
+      loanId: loan.id,
+      userId: loan.userId,
+      bookTitle: loan.bookTitle,
+      days: loan.days,
+      rentalValue: rentalData.rentalValue,
+      fine: fineData.fine,
+    },
+    null,
+    2
+  );
+}
+
+async function viewLoanDetails() {
+  if (!selectedLoanId) {
+    alert("Nenhum empréstimo criado ainda");
+    return;
+  }
+
+  const token = getToken();
+
+  const rentalResponse = await fetch(`/loans/${selectedLoanId}/rental`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const rentalData = await rentalResponse.json();
+
+  const fineResponse = await fetch(`/loans/${selectedLoanId}/fine`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const fineData = await fineResponse.json();
+
+  document.getElementById("loanDetails").innerText = JSON.stringify(
+    {
+      loanId: selectedLoanId,
+      status: fineData.status,
+      daysLate: fineData.daysLate || 0,
+      rentalValue: rentalData.rentalValue,
+      fine: fineData.fine,
+    },
+    null,
+    2
+  );
 }
 
 async function createUser() {
@@ -87,7 +148,7 @@ async function createUser() {
     return;
   }
 
-if (!email || !email.endsWith("@gmail.com")) {
+  if (!email || !email.endsWith("@gmail.com")) {
     messageCreateuser.innerText = "O email deve possuir @gmail.com";
     return;
   }
@@ -113,7 +174,6 @@ if (!email || !email.endsWith("@gmail.com")) {
 
   selectedUserId = data.id;
 
-
   document.getElementById(
     "selectedUser"
   ).innerText = `${data.name} (ID: ${data.id})`;
@@ -138,7 +198,7 @@ async function loadUsers() {
   });
 }
 
-function selectUser() {
+async function selectUser() {
   const select = document.getElementById("userSelect");
   selectedUserId = Number(select.value);
 
@@ -149,10 +209,42 @@ function selectUser() {
 
   const selectedOption = select.options[select.selectedIndex].text;
   document.getElementById("selectedUser").innerText = selectedOption;
+
+  await loadLoansByUser(selectedUserId);
 }
 
 if (window.location.pathname.includes("loans.html")) {
   loadUsers();
+}
+
+async function loadLoansByUser(userId) {
+  const token = getToken();
+
+  const response = await fetch(`/users/${userId}/loans`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const loans = await response.json();
+
+  const select = document.getElementById("loanSelect");
+  select.innerHTML = '<option value="">Selecione um empréstimo</option>';
+
+  loans.forEach((loan) => {
+    const option = document.createElement("option");
+    option.value = loan.id;
+    option.textContent = `#${loan.id} - ${loan.bookTitle}`;
+    select.appendChild(option);
+  });
+
+  selectedLoanId = null;
+  document.getElementById("loanDetails").innerText = "";
+}
+
+function selectLoan() {
+  const select = document.getElementById("loanSelect");
+  selectedLoanId = Number(select.value);
 }
 
 function logout() {
