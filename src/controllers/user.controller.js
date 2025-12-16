@@ -7,9 +7,21 @@ function createUser(req, res) {
     return res.status(400).json({ message: "Invalid user data" });
   }
 
+  if (!name || !email) {
+    return res.status(400).json({
+      message: "Name and email are required",
+    });
+  }
+
+  if (!email.endsWith("@gmail.com")) {
+    return res
+      .status(400)
+      .json({ message: "Only @gmail.com emails are allowed" });
+  }
+
   const existingUser = userService.findUserByEmail(email);
   if (existingUser) {
-    return res.status(409).json({ message: "User already exists" });
+    return res.status(409).json({ message: "User or email already exists" });
   }
 
   const user = userService.createUser({

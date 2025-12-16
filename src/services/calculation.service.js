@@ -6,13 +6,16 @@ function calculateRental(days) {
   const basePrice = 5;
   const dailyPrice = 1;
 
-  return basePrice + days * dailyPrice;
+  if (days <= 0) return basePrice;
+
+  return basePrice + dailyPrice * days;
 }
 
 function calculateFine(daysLate) {
+  const dailyFine = 2;
+
   if (daysLate <= 0) return 0;
 
-  const dailyFine = 2;
   return daysLate * dailyFine;
 }
 

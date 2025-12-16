@@ -43,8 +43,18 @@ async function createLoan() {
   }
 
   const token = getToken();
-  const bookTitle = document.getElementById("bookTitle").value;
-  const days = document.getElementById("days").value;
+  const bookTitle = document.getElementById("bookTitle").value.trim();
+  const days = number(document.getElementById("days").value);
+
+  if (!bookTitle) {
+    alert("Informe o nome do livro");
+    return;
+  }
+
+  if (!days || days <= 0) {
+    alert("Informe uma quantidade válida de dias");
+    return;
+  }
 
   const response = await fetch("/loans", {
     method: "POST",
@@ -65,11 +75,20 @@ async function createLoan() {
 }
 
 async function createUser() {
-  const name = document.getElementById("userNameCreate").value;
-  const email = document.getElementById("userEmailCreate").value;
+  const name = document.getElementById("userNameCreate").value.trim();
+  const email = document.getElementById("userEmailCreate").value.trim();
+  const messageCreateuser = document.getElementById("userMessage");
 
-  if (!name || !email) {
-    alert("Preencha nome e email");
+  messageCreateuser.innerText = "";
+  messageCreateuser.style.color = "red";
+
+  if (!name) {
+    messageCreateuser.innerText = "Informe o nome do usuário";
+    return;
+  }
+
+if (!email || !email.endsWith("@gmail.com")) {
+    messageCreateuser.innerText = "O email deve possuir @gmail.com";
     return;
   }
 
@@ -81,14 +100,19 @@ async function createUser() {
     body: JSON.stringify({ name, email }),
   });
 
+  const data = await response.json();
+
   if (!response.ok) {
-    alert("Erro ao criar usuário");
+    messageCreateuser.innerText = data.message || "Erro ao criar usuário";
+    messageCreateuser.style.color = "red";
     return;
   }
 
-  const data = await response.json();
+  messageCreateuser.innerText = "Usuário criado com sucesso";
+  messageCreateuser.style.color = "green";
 
   selectedUserId = data.id;
+
 
   document.getElementById(
     "selectedUser"
@@ -131,9 +155,7 @@ if (window.location.pathname.includes("loans.html")) {
   loadUsers();
 }
 
-
 function logout() {
   localStorage.removeItem("token");
   window.location.href = "/login.html";
 }
-
