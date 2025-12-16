@@ -18,7 +18,12 @@ function findUserByEmail(email) {
   return users.find(u => u.email === email);
 }
 
+function findUserById(id) {
+  return users.find((u) => u.id === Number(id));
+}
+
 module.exports = {
   createUser,
-  findUserByEmail
+  findUserByEmail,
+  findUserById,
 };

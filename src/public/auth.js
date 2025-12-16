@@ -1,3 +1,6 @@
+
+let selectedUserId = null;
+
 async function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -17,10 +20,8 @@ async function login() {
 
   const data = await response.json();
 
-  // Salva token
   localStorage.setItem("token", data.token);
 
-  // Redireciona
   window.location.href = "/loans.html";
 }
 
@@ -28,7 +29,6 @@ function getToken() {
   return localStorage.getItem("token");
 }
 
-// Proteção da página loans.html
 if (window.location.pathname.includes("loans.html")) {
   const token = getToken();
 
@@ -38,9 +38,12 @@ if (window.location.pathname.includes("loans.html")) {
 }
 
 async function createLoan() {
-  const token = getToken();
+  if (!selectedUserId) {
+    alert("Crie um usuário antes de fazer um empréstimo");
+    return;
+  }
 
-  const userName = document.getElementById("userName").value;
+  const token = getToken();
   const bookTitle = document.getElementById("bookTitle").value;
   const days = document.getElementById("days").value;
 
@@ -50,17 +53,16 @@ async function createLoan() {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ userName, bookTitle, days }),
+    body: JSON.stringify({
+      userId: selectedUserId,
+      bookTitle,
+      days,
+    }),
   });
 
   const data = await response.json();
 
   document.getElementById("result").innerText = JSON.stringify(data, null, 2);
-}
-
-function logout() {
-  localStorage.removeItem("token");
-  window.location.href = "/login.html";
 }
 
 async function createUser() {
@@ -80,7 +82,23 @@ async function createUser() {
     body: JSON.stringify({ name, email }),
   });
 
+  if (!response.ok) {
+    alert("Erro ao criar usuário");
+    return;
+  }
+
   const data = await response.json();
 
+  selectedUserId = data.id;
+
+  document.getElementById(
+    "selectedUser"
+  ).innerText = `${data.name} (ID: ${data.id})`;
+
   document.getElementById("result").innerText = JSON.stringify(data, null, 2);
+}
+
+function logout() {
+  localStorage.removeItem("token");
+  window.location.href = "/login.html";
 }
