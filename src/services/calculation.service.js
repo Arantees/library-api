@@ -4,7 +4,7 @@ function calculateRental(days) {
   }
 
   const basePrice = 5;
-  const dailyPrice = 2;
+  const dailyPrice = 1;
 
   if (days === 1) return basePrice;
 
